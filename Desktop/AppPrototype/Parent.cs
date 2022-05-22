@@ -54,7 +54,7 @@ namespace AppPrototype
         {
             int processID = 0;
             uint threadID = GetWindowThreadProcessId(GetForegroundWindow(), out processID);
-            //Process s 
+            
             return processID;
         }
 
