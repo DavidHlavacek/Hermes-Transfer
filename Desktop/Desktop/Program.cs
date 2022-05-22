@@ -46,10 +46,11 @@ namespace Desktop
                 }
             }
         }
+
         static void Main(string[] args)
         {
-            //GetComPorts();
-            Console.WriteLine(GetActiveWindowName());
+            GetComPorts();
+            //Console.WriteLine(GetActiveWindowName());
             Console.ReadLine();
         }
     }
