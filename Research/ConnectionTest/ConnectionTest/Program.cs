@@ -12,6 +12,9 @@ namespace BluetoothClassicConsole
 {
     class Program
     {
+        //Instructions:
+        //Download a nuGet package - InTheHand.Net.Bluetooth
+        //Add a new reference - System.Managment
         static void Main(string[] args)
         {
             BluetoothClient client = new BluetoothClient();
@@ -33,14 +36,14 @@ namespace BluetoothClassicConsole
 
             if (!device.Authenticated)
             {
-                BluetoothSecurity.PairRequest(device.DeviceAddress,"1234");
+                BluetoothSecurity.PairRequest(device.DeviceAddress, "1234");
             }
             device.Refresh();
             Console.WriteLine(device.Authenticated);
 
             client.Connect(device.DeviceAddress, BluetoothService.SerialPort);
             Console.WriteLine(device.Connected);
-            
+
             var stream = client.GetStream();
             StreamWriter sw = new StreamWriter(stream, System.Text.Encoding.ASCII);
             sw.WriteLine("Hello world!\r\n\r\n");
