@@ -4,6 +4,9 @@ void setup()
   Serial.begin(9600);
   Serial1.begin(38400);  //Default Baud for comm
 //  Serial.println("The bluetooth gates are open.\n Connect to HC-05 from any other bluetooth device with 1234 as pairing key!.");
+//    delay(100);
+//    Serial1.write("AT+CMODE=4\n\r");
+//    delay(100);
 //  Serial1.write("AT+CMODE=1\n\r");
 //  Serial1.write("AT+ROLE=1\n\r");
 //  Serial1.write("AT+INQM=1,9,48\n\r");
@@ -12,19 +15,12 @@ void setup()
 
 }
 bool rssiHasRun = false;
-void connect()
+void connect2()
 {
-  delay(100);
-  Serial1.write("AT+RESET\n\r");
-  delay(100);
-  Serial1.write("AT+CMODE=1\n\r");
-  delay(100);
-  Serial1.write("AT+ROLE=1\n\r");
-  delay(100);
-  Serial1.write("AT+INQM=1,9,10\n\r");
-  delay(100);
-  Serial1.write("AT+INIT\n\r");
-  delay(100);
+//  delay(100);
+//  String command = "AT+CMODE=3\n\r";
+//  writeString(command);
+//  delay(100);
 }
 
 String devices[8];
@@ -34,6 +30,7 @@ String positions[3];
 int strongestRssi;
 int strongestNum;
 String INQ = "+INQ:";
+String INQ2 = "\n+INQ:";
 int counter = 0;
 
 // int hexToDec(String hexString)
@@ -86,12 +83,23 @@ void breakDownAddress(String address, String positions[])//BREAKS THE INQ DATA I
 
 int k =0;
 int temp = -999;
+unsigned long StartTime = 0;
+unsigned long CurrentTime = 0;
+bool commHasRun = false;
+bool test = false;
 void loop()
 {
+  
+    if(test) {
+      String command = "AT+PAIR="+addresses[strongestNum]+",15\n\r";
+      writeString((String)"AT+PAIR="+addresses[strongestNum]+",15\n\r");
+      writeString(command);
+      test = false;
+    }
 
 //  if(rssiHasRun == false)
 //  {
-//    connect();
+//    connect2();
 //    rssiHasRun = true;
 //  }
 
@@ -102,28 +110,38 @@ void loop()
   while(Serial1.available()) {       // STORE OUTPUT INTO VARIABLE
        character = Serial1.read();
        content.concat(character);
-       delay(5);                      
-  }
+       delay(20);         
+       Serial.println("test2");             
+  } 
   if (Serial.available()){
     Serial1.write(Serial.read());     //SEND COMMAND TO HC05
-  }
+  } 
 
-  
+//  delay(100);
+  int j = 0;
   if(content!="")
   {
     Serial.print((String) "Length: " + content.length() + " CONTENT:" + content); //PRINT OUTPUT OF COMMAND
   }
   bool diffRssi = false;
-  if(content.startsWith(INQ) && devices[7] == "") { 
+  if((content.startsWith(INQ) || content.startsWith(INQ2)) && devices[7] == "") { 
+    StartTime = millis();
+    CurrentTime = millis();
     int counter = 0;
-    
-      String newContent = content.substring(5);
+      int enterIndex = content.indexOf('\n');
+      String newContent = content.substring(5, enterIndex);
       breakDownAddress(newContent,positions);
-        for(int j = 0;j <= sizeof(addresses);j++)   
+      Serial.println((String) "0Device"+ k + " : " + devices[k]);
+          Serial.println((String) "0Address"+ k + " : " + addresses[k]);
+          Serial.println((String) "0Rssi"+ k + " : " + rssi[k]);
+      if(positions[2].indexOf("7FFF")<1) {
+        for(j = 0;j <= 8;j++)   
         {
-          if(positions[0].equals(addresses[j])) {             //CHECKS IF THE ADDRESS IS ALREADY IN THE ARRAY
+          Serial.println("test3");
+          if(positions[0].indexOf(addresses[j])>0) {             //CHECKS IF THE ADDRESS IS ALREADY IN THE ARRAY
             counter++;
-            if(!(positions[2].equals(rssi[j]))) {
+            const char *rssiHex1 = positions[2].c_str(); 
+            if(!(hexToDec(rssiHex1) == (rssi[j]))) {
               diffRssi = true;
             }
           }
@@ -132,27 +150,55 @@ void loop()
           devices[k] = newContent;
           positions[0].replace(":", ",");
           addresses[k] = positions[0];
-          rssi[k] = hexToDec(positions[2]);
+          const char *rssiHex2 = positions[2].c_str(); 
+          rssi[k] = hexToDec(rssiHex2);
           Serial.println((String) "Device"+ k + " : " + devices[k]);
+          Serial.println((String) "Address"+ k + " : " + addresses[k]);
+          Serial.println((String) "Rssi"+ k + " : " + rssi[k]);
           k++;
-        } else if(counter != 0 && diffRssi) {
-          char *rssiHex = positions[2]; 
-          rssi[k] = hexToDec(rssiHex);
+        } else if (counter != 0 && diffRssi) {
+          const char *rssiHex2 = positions[2].c_str(); 
+          rssi[j] = hexToDec(rssiHex2);
+          Serial.println((String) "Device"+ j + " : " + devices[j]);
+          Serial.println((String) "Address"+ j + " : " + addresses[j]);
+          Serial.println((String) "Rssi"+ j + " : " + rssi[j]);          
         }
-  }
-
-  strongestRssi = rssi[0];                                    //SELECTS THE STRONGEST SIGNAL AND CONNECTS TO THE ADDRESS ASOCIATED WITH IT
-  for(int l = 0;l<sizeof(rssi);l++)
-  {
-    if(rssi[l] > strongestRssi)
-    {
-      strongestRssi = rssi[l];
-      strongestNum = l;
     }
   }
-  String command = "AT+PAIR="+addresses[strongestNum]+"\n\r";
-  writeString(command);
 
+  unsigned long ElapsedTime = CurrentTime - StartTime;
+  strongestRssi = 0;
+  //SELECTS THE STRONGEST SIGNAL AND CONNECTS TO THE ADDRESS ASOCIATED WITH IT
+  
+  if((ElapsedTime > 100000 && !commHasRun) || (devices[7]!="" && !commHasRun)) {
+    commHasRun = true;
+    int l;
+    for(l = 0;l<8;l++)
+    {
+      Serial.println("YOYOYO");
+      Serial.println(addresses[l]);
+      Serial.println(rssi[l]);
+      if(rssi[l] > 0) {
+        if(rssi[l] > strongestRssi)
+        {
+          strongestRssi = rssi[l];
+          strongestNum = l;
+        }
+      }
+    }
+//    while(true) {
+      Serial.println((String)"Device: " +addresses[strongestNum]);
+      delay(250);
+      String command = "AT+PAIR="+addresses[strongestNum]+",15\n\r";
+      writeString((String)"AT+PAIR="+addresses[strongestNum]+",15\n\r");
+      writeString(command);
+      
+      Serial.println("hello?");
+      test = true;
+      
+//    }
+  }
+  
 //  if(devices[8]!="")                                        //CODE TO BE DELETED (PROBABLY)
 //  {
 //    for(int x = 0; x < 9; x++)
