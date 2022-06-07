@@ -12,7 +12,7 @@ void setup()
 
 }
 bool rssiHasRun = false;
-void rssi()
+void connect()
 {
   delay(100);
   Serial1.write("AT+RESET\n\r");
@@ -36,15 +36,15 @@ int strongestNum;
 String INQ = "+INQ:";
 int counter = 0;
 
-int hexToDec(String hexString)
-{
-  int a = hexString.charAt(2);
-  int b = hexString.charAt(3);
+// int hexToDec(String hexString)
+// {
+//   int a = hexString.charAt(2);
+//   int b = hexString.charAt(3);
 
 
-  return a+b;
-}
-/*
+//   return a+b;
+// }
+
 int hexToDec(const char *hex) //Converts hexadecimal to signed decimal(kinda) 
 {
     uint16_t value;
@@ -61,7 +61,7 @@ int hexToDec(const char *hex) //Converts hexadecimal to signed decimal(kinda)
     }
     return value;
 }
-*/
+
 void writeString(String stringData) { // Used to serially push out a String with Serial.write()
   
   for (int i = 0; i < stringData.length(); i++)
@@ -91,7 +91,7 @@ void loop()
 
 //  if(rssiHasRun == false)
 //  {
-//    rssi();
+//    connect();
 //    rssiHasRun = true;
 //  }
 
@@ -111,28 +111,33 @@ void loop()
   
   if(content!="")
   {
-          Serial.print((String) "Length: " + content.length() + " CONTENT:" + content); //PRINT OUTPUT OF COMMAND
+    Serial.print((String) "Length: " + content.length() + " CONTENT:" + content); //PRINT OUTPUT OF COMMAND
   }
-  
+  bool diffRssi = false;
   if(content.startsWith(INQ) && devices[7] == "") { 
-    int counter =0;
+    int counter = 0;
     
       String newContent = content.substring(5);
       breakDownAddress(newContent,positions);
         for(int j = 0;j <= sizeof(addresses);j++)   
         {
-          if(positions[0].equals(addresses[j]))               //CHECKS IF THE ADDRESS IS ALREADY IN THE ARRAY
-          {
+          if(positions[0].equals(addresses[j])) {             //CHECKS IF THE ADDRESS IS ALREADY IN THE ARRAY
             counter++;
+            if(!(positions[2].equals(rssi[j]))) {
+              diffRssi = true;
+            }
           }
         }
-        if(counter == 0)
-        {
+        if(counter == 0) {
           devices[k] = newContent;
+          positions[0].replace(":", ",");
           addresses[k] = positions[0];
           rssi[k] = hexToDec(positions[2]);
-          Serial.println("Device"+(String)k + " : " + (String)devices[k]);
+          Serial.println((String) "Device"+ k + " : " + devices[k]);
           k++;
+        } else if(counter != 0 && diffRssi) {
+          char *rssiHex = positions[2]; 
+          rssi[k] = hexToDec(rssiHex);
         }
   }
 
