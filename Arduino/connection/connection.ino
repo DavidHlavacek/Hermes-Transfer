@@ -1,55 +1,7 @@
-void setup()
-{
- 
-  Serial.begin(9600);
-  Serial1.begin(38400);  //Default Baud for comm
-//  Serial.println("The bluetooth gates are open.\n Connect to HC-05 from any other bluetooth device with 1234 as pairing key!.");
-//    delay(100);
-//    Serial1.write("AT+CMODE=4\n\r");
-//    delay(100);
-//  Serial1.write("AT+CMODE=1\n\r");
-//  Serial1.write("AT+ROLE=1\n\r");
-//  Serial1.write("AT+INQM=1,9,48\n\r");
-//  Serial1.write("AT+INIT\n\r");
-//  Serial1.write("AT+INQ\n\r");
-//      delay(500);
-//      Serial1.write("\r\nAT+ORGL\r\n");
-//      delay(500);
-//      Serial1.write("\r\nAT+RESET\r\n");
-//      delay(500);
-//      Serial1.write("\r\nAT+ROLE=1\r\n");
-//      delay(500);
-//      Serial1.write("\r\nAT+CMODE=1\r\n");
-//      delay(500);
-//      Serial1.write("\r\nAT+ROLE=1\r\n");
-//      delay(500);
-//      Serial1.write("\r\nAT+INQM=1,8,20\r\n");
-//      delay(500);
-//      Serial1.write("\r\nAT+INQ\r\n");
-//      delay(500);
-//      delay(100);
-//      Serial1.write("AT+RESET\r\n");
-//
-//      delay(100);
-//       serial1Flush();
-//       Serial1.flush();
-
-
-}
-bool rssiHasRun = false;
-void connect2()
-{
-      
-      
-      
-}
-
-void serial1Flush(){
-  while(Serial1.available() > 0) {
-    char t = Serial1.read();
-  }
-}
-
+const int firstButtonPin = 6;
+const int secButtonPin = 7;
+int firstBttonState = 0;
+int secButtonState = 0;
 String devices[8];
 String addresses[8];
 int rssi[8];
@@ -59,15 +11,47 @@ int strongestNum;
 String INQ = "+INQ:";
 String INQ2 = "INQ:";
 int counter = 0;
+int k =0;
+unsigned long StartTime = 0;
+unsigned long CurrentTime = 0;
+bool commHasRun = false;
+int cmdIndex = 0;
+bool executed = false;
+int inq = 0;
+String command;
+const char * cmd;
+boolean done = false;
 
-// int hexToDec(String hexString)
-// {
-//   int a = hexString.charAt(2);
-//   int b = hexString.charAt(3);
+void setup()
+{
+  Serial.begin(9600);
+  Serial1.begin(38400);  //Default Baud for comm
+  pinMode(firstButtonPin, INPUT);
+  pinMode(secButtonPin, INPUT);
+}
+void connect2(){}
 
+void serial1Flush(){
+  while(Serial1.available() > 0) {
+    char t = Serial1.read();
+  }
+}
 
-//   return a+b;
-// }
+void clearArrays()
+{
+  for (int x = 0; x < sizeof(devices); x++)
+  {
+    devices[x] = "";
+  }
+  for (int y = 0; y < sizeof(addresses); y++)
+  {
+    addresses[y] ="";
+  }
+  for (int z = 0; z < sizeof(rssi); z++)
+  {
+    rssi[z] = 0;
+  }
+}
 
 int hexToDec(const char *hex) //Converts hexadecimal to signed decimal(kinda) 
 {
@@ -109,48 +93,19 @@ void breakDownAddress(String address, String positions[])//BREAKS THE INQ DATA I
   positions[2] = thirdValue;
 }
 
-int k =0;
-int temp = -999;
-unsigned long StartTime = 0;
-unsigned long CurrentTime = 0;
-bool commHasRun = false;
-bool test = true;
-int cmdIndex = 0;
-bool executed = false;
-int inq = 0;
-      String command;
-      const char * cmd;
-    boolean done = false;
 void loop()
 {
-
-    if(!done) {
-  //  delay(500);
-  //      String command = "\r\nAT+INQM?\r\n";
-  //      const char * cmd = command.c_str();
-  //      Serial1.write(cmd);
-  //      delay(500);
-  //    if(test) {
-  ////      String command = "AT+PAIR="+addresses[strongestNum]+",15\n\r";
-  ////      writeString((String)"AT+PAIR="+addresses[strongestNum]+",15\n\r");
-  ////      writeString(command);
-  //      test = false;
-  //        delay(500);
-  //      Serial1.write("AT+ORGL\n\r");
-  //      delay(500);
-  //      Serial1.write("AT+RESET\n\r");
-  //      delay(500);
-  //      Serial1.write("AT+ROLE=1\n\r");
-  //      delay(500);
-  //      Serial1.write("AT+CMODE=1\n\r");
-  //      delay(500);
-  //      Serial1.write("AT+ROLE=1\n\r");
-  //      delay(500);
-  //      Serial1.write("AT+INQM=1,8,20\n\r");
-  //      delay(500);
-  //      Serial1.write("AT+INQ\n\r");
-  //      delay(500);
-  //    }
+    firstBttonState = digitalRead(firstButtonPin);
+    secButtonState = digitalRead(secButtonPin);
+    while (Serial.available()) {
+        Serial1.write(Serial.read());
+    }
+    while (Serial1.available()) {
+         Serial.write(Serial1.read());
+    }
+    if (firstBttonState == HIGH) {
+      Serial.write("First button pressed\n");
+      while(!done) {
     if(cmdIndex < 12)
     {
         Serial.println(cmdIndex);
@@ -206,9 +161,6 @@ void loop()
 //            delay(100);
             cmdIndex++;
   //        }
-  
-          
-  
         }
         else if(cmdIndex == 5 && !executed){
           delay(100);
@@ -279,12 +231,11 @@ void loop()
   
      String content = "";
      char character;
-      if (Serial.available()){
-      Serial1.write(Serial.read());     //SEND COMMAND TO HC05
-    }
+     if (Serial.available()){
+     Serial1.write(Serial.read());     //SEND COMMAND TO HC05
+     }
     boolean firstplus = false;
     while(Serial1.available()) {       // STORE OUTPUT INTO VARIABLE
-  //       Serial.println("STOOPID");
          character = Serial1.read();
          if(character == '+'){firstplus = true;}
          if(firstplus && character == '+')
@@ -297,21 +248,14 @@ void loop()
     }
     if(inq < 8 && cmdIndex > 11)
      {
-  //        delay(2000);
-            Serial.println("CMON");
-          delay(100);
-  //         
+          Serial.println("CMON");
+          delay(100);         
           command = "AT+INQ\r\n";
           cmd = command.c_str();
           Serial1.write(cmd);
           inq++;
      }
-   
-     
-    
-  
-  
-  //  delay(100);
+
     int j = 0;
     if(content!="")
     {
@@ -374,13 +318,11 @@ void loop()
         Serial.println("YOYOYO");
         Serial.println(addresses[l]);
         Serial.println(rssi[l]);
-  
           if(rssi[l] > strongestRssi)
           {
             strongestRssi = rssi[l];
             strongestNum = l;
           }
-        
       }
       if(!done) {
   //    while(true) {
@@ -398,54 +340,54 @@ void loop()
         
         Serial.println("hello?");
         done = true;
-      }
-        
-        
-        
-  //    }
+      }   
     }
-    
-  //  if(devices[8]!="")                                        //CODE TO BE DELETED (PROBABLY)
-  //  {
-  //    for(int x = 0; x < 9; x++)
-  //    {
-  //      String sa[3]; 
-  //      int r=0, t=0;
-  //      for (int i=0; i < devices[x].length(); i++)
-  //      {
-  //       if(devices[x].charAt(i) == ',') 
-  //        { 
-  //          sa[t] = devices[x].substring(r, i); 
-  //          r=(i+1); 
-  //          t++; 
-  //        }
-  //      }
-  //      Serial.println(hexToDec(sa[2]));
-  //      if(hexToDec(sa[2])>temp){
-  //        temp = hexToDec(sa[2]);
-  //        devices[0] = sa[0];
-  //        }    
-  //    }
-  //  }
-  // String command = "";
-  //  if(devices[8]!=""){
-  //    Serial.println(devices[0]);
-  //    String address; 
-  //      int r=0, t=0;
-  //      for (int i=0; i < devices[0].length(); i++)
-  //      { 
-  //       if(devices[0].charAt(i) == ':') 
-  //        { 
-  //          address += devices[0].substring(r, i);
-  //          address += ',';
-  //          r=(i+1); 
-  //          t++; 
-  //        }
-  //      }
-  //      command = "AT+PAIR="+address+"\n\r";
-  //      writeString(command);
-  //  }
-  
     content = "";
     }
+    }
+    if(secButtonState == HIGH)
+    {
+      //clearArrays();
+      counter = 0;
+      k =0;
+      commHasRun = false;
+      cmdIndex = 0;
+      executed = false;
+      inq = 0;
+      done = false;
+      
+      command = "AT\r\n";
+      cmd = command.c_str();
+      Serial1.write(cmd);
+      delay(500);
+      command = "AT+RESET\r\n";
+      cmd = command.c_str();
+      Serial1.write(cmd);
+    }
 }
+  //  delay(500);
+  //      String command = "\r\nAT+INQM?\r\n";
+  //      const char * cmd = command.c_str();
+  //      Serial1.write(cmd);
+  //      delay(500);
+  //    if(test) {
+  ////      String command = "AT+PAIR="+addresses[strongestNum]+",15\n\r";
+  ////      writeString((String)"AT+PAIR="+addresses[strongestNum]+",15\n\r");
+  ////      writeString(command);
+  //      test = false;
+  //        delay(500);
+  //      Serial1.write("AT+ORGL\n\r");
+  //      delay(500);
+  //      Serial1.write("AT+RESET\n\r");
+  //      delay(500);
+  //      Serial1.write("AT+ROLE=1\n\r");
+  //      delay(500);
+  //      Serial1.write("AT+CMODE=1\n\r");
+  //      delay(500);
+  //      Serial1.write("AT+ROLE=1\n\r");
+  //      delay(500);
+  //      Serial1.write("AT+INQM=1,8,20\n\r");
+  //      delay(500);
+  //      Serial1.write("AT+INQ\n\r");
+  //      delay(500);
+  //    }
