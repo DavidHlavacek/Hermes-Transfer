@@ -4,7 +4,7 @@ const int firstButtonPin = 6;
 const int secButtonPin = 7;
 int firstBttonState = 0;
 int secButtonState = 0;
-
+//haha
 String command;
 const char *cmd;
 
