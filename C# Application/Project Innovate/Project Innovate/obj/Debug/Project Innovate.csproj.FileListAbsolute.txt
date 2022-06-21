@@ -1,0 +1,12 @@
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\bin\Debug\Project Innovate.exe.config
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\bin\Debug\Project Innovate.exe
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\bin\Debug\Project Innovate.pdb
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.AssemblyReference.cache
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.SuggestedBindingRedirects.cache
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project_Innovate.Form1.resources
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project_Innovate.Properties.Resources.resources
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.GenerateResource.cache
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.CoreCompileInputs.cache
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project Innovate.exe
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project Innovate.pdb
+C:\Users\Nathan\source\repos\Project Innovate\Project Innovate\obj\Debug\Project_Innovate.About.resources
