@@ -19,13 +19,11 @@ void reset();
 void setUp();
 void search();
 
-
 void breakDownAddress(String, String[]);
 int hexToDec(const char*);
 
 int find(std::vector<int>);
 void connect(int);
-
 void loop() {
     firstBttonState = digitalRead(firstButtonPin);
     secButtonState = digitalRead(secButtonPin);
@@ -38,105 +36,103 @@ void loop() {
     }
     Serial1.flush();
     if (firstBttonState == HIGH) {
-        Serial.write("Search button pressed\n");
+        Serial.println("Executing...");
         search();
-        delay(500);
-        Serial.println("button1Pressed");
+        delay(800);
+        // Serial.println("button1Pressed");
     } else if (secButtonState == HIGH) {
         // Serial.write("Reset button pressed\n");
         // search();
-        // delay(500);
+        // delay(800);
+        Serial1.write('1');
     }
 }
 
 void reset() {
-    //reset variables            //TODO: EMPTY DEVICES LIST!
-    Serial.println("resetStart");
-    Serial.println("AT:");
+    //reset variables                 //TODO: EMPTY DEVICES LIST!
+    // Serial.println("resetStart");
+    // Serial.println("AT:");
     Serial1.flush();
     command = "AT\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
     Serial1.flush();
-    delay(500);
+    delay(800);
     Serial1.flush();
-    Serial.println("AT+ORGL:");
+    // Serial.println("AT+ORGL:");
     command = "AT+ORGL\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
     Serial1.flush();
-    delay(500);
+    delay(800);
     Serial1.flush();
-    Serial.println("RESET:");
+    // Serial.println("RESET:");
     command = "AT+RESET\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
     Serial1.flush();
-    delay(500);
+    delay(800);
     Serial1.flush();
-    Serial.println("resetEnd");
+    // Serial.println("resetEnd");
 }
 
 void setUp() {
     reset();
-    Serial.println("setupStart");
-    Serial.println("CMODE:");
+    // Serial.println("setupStart");
+    // Serial.println("CMODE:");
     Serial1.flush();
     command = "AT+CMODE=1\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
     Serial1.flush();
-    delay(500);
+    delay(800);
     Serial1.flush();
-    Serial.println("ROLE:");
+    // Serial.println("ROLE:");
     command = "AT+ROLE=1\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
     Serial1.flush();
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
     Serial1.flush();
-    delay(500);
+    delay(800);
     Serial1.flush();
-    Serial.println("INQM");
+    // Serial.println("INQM");
     command = "AT+INQM=1,9,48\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
+    delay(800);
     Serial1.flush();
-    delay(500);
-    Serial1.flush();
-    Serial.println("INIT");
     command = "AT+INIT\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
+    delay(800);
     Serial1.flush();
-    delay(500);
-    Serial1.flush();
-    Serial.println("setupEnd");
+    // Serial.println("setupEnd");
 }
 
 void search() {
     setUp();
-    Serial.println("searchStart");
+    // Serial.println("searchStart");
     char byte;
     String line;
 
@@ -145,17 +141,15 @@ void search() {
     std::vector<String> addressList;
     std::vector<String> groupList;
     std::vector<int> rssiList;
-    Serial.println("INQ:");
+    // Serial.println("INQ:");
     command = "AT+INQ\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    while (Serial1.available()) {
-         Serial.write(Serial1.read()); //Output response
-    }
-    Serial1.flush();
-    delay(500);
-    Serial1.flush();
-    Serial.println("searchWhileLoopStart");
+    // while (Serial1.available()) {
+    //      Serial.write(Serial1.read()); //Output response
+    // }
+    delay(1000);
+    // Serial.println("searchWhileLoopStart");
     while(Serial1.available()) {       // STORE OUTPUT INTO VARIABLE
         
         byte = Serial1.read();
@@ -175,7 +169,7 @@ void search() {
             bool isDuplicate = false;
             bool diffRssi = false;
             int i = 0;
-            Serial.println("searchWhileForLoopStart");
+            // Serial.println("searchWhileForLoopStart");
             for(i = 0; i<addressList.size(); i++) {         //Go through list
                 if(addressList[i] == positions[0]) {        //Check if duplicate
                     isDuplicate = true;
@@ -185,7 +179,7 @@ void search() {
                     break;
                 }
             }
-            Serial.println("searchWhileForLoopEnd");
+            // Serial.println("searchWhileForLoopEnd");
 
             if(!isDuplicate) {
                 addressList.push_back(positions[0]);
@@ -196,17 +190,17 @@ void search() {
                     rssiList[i] = rssiDec; 
                 }
             }
-            for(int i = 0; i < addressList.size(); i++)
-            {
-                Serial.println(addressList[i] + " " + groupList[i] + " " + rssiList[i]);
-            }
+            // for(int i = 0; i < addressList.size(); i++)
+            // {
+            //     Serial.println(addressList[i] + " " + groupList[i] + " " + rssiList[i]);
+            // }
             // Serial.println(positions[0] + positions[1] + rssiDec);
-            Serial1.flush();
+            // Serial1.flush();             //MAYBE NEEDED TO INCLUDE!!!
         }
     }
     Serial1.flush();
-    Serial.println("searchWhileLoopEnd");
-    Serial.println("searchEnd");
+    // Serial.println("searchWhileLoopEnd");
+    // Serial.println("searchEnd");
     connect(find(rssiList), addressList);
 
 }
@@ -243,7 +237,7 @@ int hexToDec(const char *hex) //Converts hexadecimal to signed decimal(kinda)
 }
 
 int find(std::vector<int> rssiList) {
-    Serial.println("findStart");
+    // Serial.println("findStart");
     int strongestRssi = 0;
     int strongestIndex = 0;
     for(int i = 0; i < rssiList.size(); i++)
@@ -254,14 +248,28 @@ int find(std::vector<int> rssiList) {
                 strongestIndex = i;
             }
         }
-    Serial.println("findEnd");
+    // Serial.println("findEnd");
     return strongestIndex;
 }
-void connect(int index, std::vector<String> addressList) {  
-    Serial.println("connStart"); 
+void connect(int index, std::vector<String> addressList) { 
+    
+    command = "AT+RNAME?" + addressList[index] + "\r\n";
+    cmd = command.c_str();
+    Serial1.write(cmd);
+    delay(800);
+    String name;
+    while (Serial1.available()) {     
+        char byte = Serial1.read();
+        name.concat(byte);
+        delay(20); 
+    }
+    Serial1.flush();
+    Serial.println("Connecting to " + name); 
+
     command = "AT+PAIR=" + addressList[index] + ",15\r\n";
     cmd = command.c_str();
     Serial1.write(cmd);
-    delay(500);
-    Serial.println("connEnd");
+    delay(800);
+    Serial1.flush();
+    // Serial.println("connEnd");
 }

@@ -1,5 +1,5 @@
 {
-    "sketch": "Arduino/connection2/connection2.ino",
+    "sketch": "Arduino/connection/connection.ino",
     "board": "arduino:samd:mkrzero",
     "port": "/dev/tty.usbmodem14101",
     "output": "../ArduinoOutput"
