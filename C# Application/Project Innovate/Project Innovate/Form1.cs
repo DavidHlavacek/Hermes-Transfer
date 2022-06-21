@@ -135,7 +135,7 @@ namespace Project_Innovate
 
         }
 
-        private void downloadSFTPfile(string localPath, string remotePath)
+        /*private void downloadSFTPfile(string localPath, string remotePath)
         {
             SftpClient client = new SftpClient(host, port, uN, pwd);
             client.Connect();
@@ -154,13 +154,37 @@ namespace Project_Innovate
             {
                 client.Disconnect();
             }
-        }
+        }*/
 
 
         private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            downloadSFTPfile(@"D:\testSSD", pathH);
-            
+            SftpClient client = new SftpClient(host, port, uN, pwd);
+            client.Connect();
+            string sv = "//httpdocs/testYAY.txt";
+            string local = @"D:\testSSD\test.txt";
+
+            using(Stream stream = File.OpenWrite(local))
+            {
+                client.DownloadFile(sv, stream, x=>MessageBox.Show(x.ToString()));
+            }
+
+           /* try
+            {
+                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+            finally
+            {
+                client.Disconnect();
+            }*/
+
+
+            //downloadSFTPfile(@"D:\testSSD", pathH);
+
             //INSERT CODE FOR DOWNLOAD
             /*if (true) //check if download was successful
             {
