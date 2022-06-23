@@ -2,6 +2,8 @@
 
 ## Checklist
 
+###Software
+
 * Arduino 
   * Bluetooth connection ✓
 * Filepath 
@@ -11,3 +13,16 @@
   * Download ✓
   * Upload ✓
 
+
+### Hardware
+
+* Design
+ * Plan
+ * Prototype
+
+### Documents
+
+* Technical Design
+ * HOW 
+* Advisory Report
+* Test plan
