@@ -17,12 +17,12 @@
 ### Hardware
 
 * Design
- * Plan
- * Prototype
+  * Plan
+  * Prototype
 
 ### Documents
 
 * Technical Design
- * HOW 
+  * HOW 
 * Advisory Report
 * Test plan
