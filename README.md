@@ -8,5 +8,6 @@
   * Python ✓
   * Executable
 * SFTP
-  * Download 
-  * Upload 
+  * Download ✓
+  * Upload ✓
+
