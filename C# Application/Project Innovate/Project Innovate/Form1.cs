@@ -8,8 +8,11 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
+
 
 namespace Project_Innovate
 {
@@ -253,6 +256,12 @@ namespace Project_Innovate
             }*/
         }
 
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
