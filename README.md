@@ -3,10 +3,10 @@
 ##Checklist
 
 * Arduino 
-** Bluetooth connection ✓
+* * Bluetooth connection ✓
 * Filepath 
-** Python ✓
-** Executable
+* * Python ✓
+* * Executable
 * SFTP
-** Download 
-** Upload 
+* * Download 
+* * Upload 
