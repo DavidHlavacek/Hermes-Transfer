@@ -2,7 +2,7 @@
 
 ## Checklist
 
-###Software
+### Software
 
 * Arduino 
   * Bluetooth connection ✓
