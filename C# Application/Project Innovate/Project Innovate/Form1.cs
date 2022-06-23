@@ -25,6 +25,56 @@ namespace Project_Innovate
             InitializeComponent();
         }
 
+        public static void Test(string name)
+        {
+            string appPath = @"D:\intellij\Test\dist\testing\testing.exe";
+            Process proc = new Process();
+            ProcessStartInfo si = new ProcessStartInfo(appPath, name);
+            si.WindowStyle = ProcessWindowStyle.Normal;
+            si.WorkingDirectory = @"D:\intellij\Test\dist\testing";
+            si.Verb = "runas";             // UAC elevation required.
+            si.UseShellExecute = true;     // Required for UAC elevation.
+            si.RedirectStandardOutput = true;
+            proc.StartInfo = si;
+            proc.Start();
+            using (StreamReader reader = proc.StandardOutput)
+            {
+                string result2 = reader.ReadToEnd();
+                Console.WriteLine(result2);
+            }
+            proc.WaitForExit();
+        }
+
+        private static string GetActiveWindowTitle()
+        {
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+            IntPtr handle = GetForegroundWindow();
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString();
+            }
+            return null;
+        }
+
+        private static string run_cmd(string args)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = @"C:\Users\Miroslav\AppData\Local\Programs\Python\Python310\python.exe";
+            start.Arguments = string.Format("{0} {1}", @"D:\intellij\Test\testing.py", args);
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+            using (Process process = Process.Start(start))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string result = reader.ReadToEnd();
+                    return result;
+                }
+            }
+        }
+
         private void Form1_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -82,9 +132,16 @@ namespace Project_Innovate
 
         private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
+            Thread.Sleep(2000);
+            string line = GetActiveWindowTitle();
+            string[] values = line.Split(' ');
+            string file = @values[0];
+
             try
             {
-                string source = @"C:\Users\arian\Desktop\testYAY.txt";
+                
+                string source = run_cmd(file);
                 string dest = pathH;
 
                 UploadSFTPFile(host, uN, pwd, source, dest, port);
