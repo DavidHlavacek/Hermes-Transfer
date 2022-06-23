@@ -1,0 +1,15 @@
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\obj\Debug\experimentSFTP.csproj.AssemblyReference.cache
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\obj\Debug\experimentSFTP.csproj.SuggestedBindingRedirects.cache
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\obj\Debug\experimentSFTP.csproj.CoreCompileInputs.cache
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\experimentSFTP.exe.config
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\experimentSFTP.exe
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\experimentSFTP.pdb
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\Rebex.Common.dll
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\Rebex.Networking.dll
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\Rebex.Sftp.dll
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\Rebex.Common.xml
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\Rebex.Networking.xml
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\bin\Debug\Rebex.Sftp.xml
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\obj\Debug\experimentSFTP.csproj.CopyComplete
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\obj\Debug\experimentSFTP.exe
+C:\Users\arian\Desktop\Project4\Project_Innovate\C# Application\experimentSFTP\experimentSFTP\obj\Debug\experimentSFTP.pdb
