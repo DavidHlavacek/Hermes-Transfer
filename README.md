@@ -1,6 +1,6 @@
 # Project_Innovate
 
-##Checklist
+## Checklist
 
 * Arduino 
   * Bluetooth connection ✓
