@@ -1,0 +1,6 @@
+{
+    "sketch": "Arduino/connection/connection.ino",
+    "board": "arduino:samd:mkrzero",
+    "port": "/dev/tty.usbmodem14101",
+    "output": "../ArduinoOutput"
+}

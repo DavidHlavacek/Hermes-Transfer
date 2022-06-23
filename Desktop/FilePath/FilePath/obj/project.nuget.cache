@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "EMotwpsVefJo4ZGTFhzjQCNJBzmYz5jeSxS9uTObC5NqrRBkxpqp+FTVn405HrpRLQZ4P1LNZTzd02faCjXJxw==",
+  "success": true,
+  "projectFilePath": "D:\\C#\\FilePath\\FilePath\\FilePath.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Miroslav\\.nuget\\packages\\cliwrap\\3.4.4\\cliwrap.3.4.4.nupkg.sha512"
+  ],
+  "logs": []
+}
