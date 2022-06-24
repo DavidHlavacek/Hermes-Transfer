@@ -1,6 +1,8 @@
 ﻿using System;
-using Renci.SshNet;
-using Renci.SshNet.Sftp;
+using Rebex.Net;
+using Rebex.IO;
+//using Renci.SshNet;
+//using Renci.SshNet.Sftp;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,20 +14,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using System.Runtime.InteropServices;
 
 namespace Project_Innovate
 {
     public partial class Form1 : Form
     {
+        /*
         string pathH = "//httpdocs";
         string host = "hermes.serverict.nl";
         string uN = "hermes";
         string pwd = "RCF&9xdr";
         int port = 22;
+        */
         public Form1()
-        {
+        {    
             InitializeComponent();
+            Rebex.Licensing.Key = "==AJxMmIrQeJ87QJaW9ySkUdVVE3N+N9me5ell+rGMjs4Y==";
         }
 
         public static void Test(string name)
@@ -59,6 +64,7 @@ namespace Project_Innovate
                 return Buff.ToString();
             }
             return null;
+            
         }
 
         private static string run_cmd(string args)
@@ -135,6 +141,20 @@ namespace Project_Innovate
 
         private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            try
+            {
+                Sftp client = new Sftp();
+                client.Connect("hermes.serverict.nl");
+                client.Login("hermes", "RCF&9xdr");
+                client.Upload(@"D:\testSSD\*", "/httpdocs", TraversalMode.MatchFilesShallow,
+                TransferMethod.Copy, ActionOnExistingFiles.OverwriteAll);
+                MessageBox.Show("Directory files uploaded successfully!");
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
 
             Thread.Sleep(2000);
             string line = GetActiveWindowTitle();
@@ -145,117 +165,35 @@ namespace Project_Innovate
             {
                 
                 string source = run_cmd(file);
-                string dest = pathH;
+                //string dest = pathH;
 
-                UploadSFTPFile(host, uN, pwd, source, dest, port);
-                MessageBox.Show("File has been Uploaded!");
+                //UploadSFTPFile(host, uN, pwd, source, dest, port);
+                //MessageBox.Show("File has been Uploaded!");
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());
             }
 
-
-
-            //INSERT CODE FOR UPLOAD
-            /*if (true) //check if upload was successful
-            {
-                MessageBox.Show("File has been successfully uploaded");
-            }
-            else
-            {
-                MessageBox.Show("Error: File could not be uploaded");
-            }
-            */
         }
 
-        private void UploadSFTPFile(string host, string username, string password, string sourcefile, string destination, int port)
-
-        {
-
-            using (SftpClient client = new SftpClient(host, port, username, password))
-
-            {
-
-                client.Connect();
-
-                client.ChangeDirectory(destination);
-
-                using (FileStream fs = new FileStream(sourcefile, FileMode.Open))
-
-                {
-
-                    client.BufferSize = 4 * 1024;
-
-                    client.UploadFile(fs, Path.GetFileName(sourcefile));
-
-                }
-
-            }
-
-        }
-
-        /*private void downloadSFTPfile(string localPath, string remotePath)
-        {
-            SftpClient client = new SftpClient(host, port, uN, pwd);
-            client.Connect();
-
-            try
-            {
-                var s = File.Create(localPath);
-                client.DownloadFile(remotePath, s);
-                MessageBox.Show("Files have been downloaded!");
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.Message.ToString());
-            }
-            finally
-            {
-                client.Disconnect();
-            }
-        }*/
 
 
         private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SftpClient client = new SftpClient(host, port, uN, pwd);
-            client.Connect();
-            string sv = "//httpdocs/testYAY.txt";
-            string local = @"D:\testSSD\test.txt";
-
-            using(Stream stream = File.OpenWrite(local))
+            try
             {
-                client.DownloadFile(sv, stream, x=>MessageBox.Show(x.ToString()));
+                Sftp client = new Sftp();
+                client.Connect("hermes.serverict.nl");
+                client.Login("hermes", "RCF&9xdr");
+                client.Download("/httpdocs/", @"D:\testSFTPD", TraversalMode.Recursive);
+                MessageBox.Show("Directory downloaded from SFTP with success!");
             }
-
-           /* try
+            catch (Exception ex)
             {
-                
+                MessageBox.Show(ex.Message);
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show(exception.Message.ToString());
-            }
-            finally
-            {
-                client.Disconnect();
-            }*/
-
-
-            //downloadSFTPfile(@"D:\testSSD", pathH);
-
-            //INSERT CODE FOR DOWNLOAD
-            /*if (true) //check if download was successful
-            {
-                MessageBox.Show("File has been successfully downloaded");
-            }
-            else
-            {
-                MessageBox.Show("Error: File could not be downloaded");
-            }*/
         }
-
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();

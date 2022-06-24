@@ -57,7 +57,7 @@ namespace experimentSFTP
                 client.Login("hermes", "RCF&9xdr");
                 Console.WriteLine("Connected to server!");
                 client.Upload(@"D:\thisAllPC\*", "/httpdocs", TraversalMode.MatchFilesShallow,
-     TransferMethod.Copy, ActionOnExistingFiles.OverwriteAll); //change path leave the \* so everything before \*
+                TransferMethod.Copy, ActionOnExistingFiles.OverwriteAll); //change path leave the \* so everything before \*
                 Console.WriteLine("Directory uploaded");
             }
             catch(Exception ex)
@@ -89,3 +89,4 @@ namespace experimentSFTP
         }
     }
 }
+
