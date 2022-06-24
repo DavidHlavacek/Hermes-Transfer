@@ -40,3 +40,24 @@ D:\C#\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debu
 D:\C#\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Renci.SshNet.dll
 D:\C#\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Renci.SshNet.xml
 D:\C#\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.CopyComplete
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.AssemblyReference.cache
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.SuggestedBindingRedirects.cache
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project_Innovate.About.resources
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project_Innovate.Form1.resources
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project_Innovate.Properties.Resources.resources
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.GenerateResource.cache
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.CoreCompileInputs.cache
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.exe
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.pdb
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Project Innovate.exe.config
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Project Innovate.exe
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Project Innovate.pdb
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Rebex.Common.dll
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Rebex.Networking.dll
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Rebex.Sftp.dll
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Renci.SshNet.dll
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Rebex.Common.xml
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Rebex.Networking.xml
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Rebex.Sftp.xml
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\bin\Debug\Renci.SshNet.xml
+D:\C#\test\Project_Innovate\C# Application\Project Innovate\Project Innovate\obj\Debug\Project Innovate.csproj.CopyComplete

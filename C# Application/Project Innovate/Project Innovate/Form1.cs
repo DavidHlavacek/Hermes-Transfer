@@ -1,8 +1,6 @@
 ﻿using System;
 using Rebex.Net;
 using Rebex.IO;
-//using Renci.SshNet;
-//using Renci.SshNet.Sftp;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -69,9 +67,12 @@ namespace Project_Innovate
 
         private static string run_cmd(string args)
         {
+            string currentDir = Directory.GetCurrentDirectory();
+            string pythonPath = Path.GetFullPath(Path.Combine(currentDir, @"..\..\..\..\..\Test\venv\Scripts\python.exe"));
+            string scriptPath = Path.GetFullPath(Path.Combine(currentDir, @"..\..\..\..\..\Test\testing.py"));
             ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = @"C:\Users\Miroslav\AppData\Local\Programs\Python\Python310\python.exe";
-            start.Arguments = string.Format("{0} {1}", @"D:\intellij\Test\testing.py", args);
+            start.FileName = pythonPath;
+            start.Arguments = string.Format("{0} {1}", scriptPath, args);
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
             using (Process process = Process.Start(start))
@@ -83,15 +84,14 @@ namespace Project_Innovate
                 }
             }
         }
-
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
+            private void Form1_Resize(object sender, EventArgs e)
             {
-                Hide();
-                notifyIcon1.Visible = true;
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    Hide();
+                    notifyIcon1.Visible = true;
+                }
             }
-        }
 
         private bool allowVisible;     // ContextMenu's Show command used
         private bool allowClose;       // ContextMenu's Exit command used
@@ -141,12 +141,27 @@ namespace Project_Innovate
 
         private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string currentDir = Directory.GetCurrentDirectory();
+            string designatedFolder = Path.GetFullPath(Path.Combine(currentDir, @"..\..\..\..\..\Test\httpdocs\"));
+            MessageBox.Show("Click the file.");
+            Thread.Sleep(3000);
+            string line = GetActiveWindowTitle();
+            string[] values = line.Split(' ');
+            string file = @values[0];
+            MessageBox.Show(file);
+            MessageBox.Show("Close the file.");
+            string resultF = run_cmd(file);
+            string result = resultF.Substring(0, resultF.Length - 2);
+            string source = String.Format(@"{0}", result);
+
+            File.Copy(source, designatedFolder + Path.GetFileName(source));
+
             try
             {
                 Sftp client = new Sftp();
                 client.Connect("hermes.serverict.nl");
                 client.Login("hermes", "RCF&9xdr");
-                client.Upload(@"D:\testSSD\*", "/httpdocs", TraversalMode.MatchFilesShallow,
+                client.Upload(designatedFolder + "*", "/httpdocs/", TraversalMode.MatchFilesShallow,
                 TransferMethod.Copy, ActionOnExistingFiles.OverwriteAll);
                 MessageBox.Show("Directory files uploaded successfully!");
             }
@@ -154,40 +169,20 @@ namespace Project_Innovate
             {
                 MessageBox.Show(ex.Message);
             }
-
-
-
-            Thread.Sleep(2000);
-            string line = GetActiveWindowTitle();
-            string[] values = line.Split(' ');
-            string file = @values[0];
-
-            try
-            {
-
-                string source = run_cmd(file);
-                //string dest = pathH;
-
-                //UploadSFTPFile(host, uN, pwd, source, dest, port);
-                //MessageBox.Show("File has been Uploaded!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
+            File.Delete(designatedFolder + Path.GetFileName(source));
 
         }
-
-
-
+        
         private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string currentDir = Directory.GetCurrentDirectory();
+            string designatedFolder = Path.GetFullPath(Path.Combine(currentDir, @"..\..\..\..\..\Test\httpdocs"));
             try
             {
                 Sftp client = new Sftp();
                 client.Connect("hermes.serverict.nl");
                 client.Login("hermes", "RCF&9xdr");
-                client.Download("/httpdocs/", @"D:\testSFTPD", TraversalMode.Recursive);
+                client.Download("/httpdocs/*", designatedFolder, TraversalMode.Recursive);
                 MessageBox.Show("Directory downloaded from SFTP with success!");
             }
             catch (Exception ex)
@@ -204,14 +199,17 @@ namespace Project_Innovate
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //INSERT CODE FOR DOWNLOAD
-            if (true) //check if delete was successful
+            try
             {
-                MessageBox.Show("File has been successfully deleted");
+                Sftp client = new Sftp();
+                client.Connect("hermes.serverict.nl");
+                client.Login("hermes", "RCF&9xdr");
+                client.Delete("/httpdocs/*", TraversalMode.MatchFilesShallow);
+                MessageBox.Show("SFTP folder contents cleared!");
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Error: File could not be deleted");
+                MessageBox.Show(ex.Message);
             }
         }
     }
