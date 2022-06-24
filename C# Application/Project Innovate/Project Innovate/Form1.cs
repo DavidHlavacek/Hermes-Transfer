@@ -137,12 +137,8 @@ namespace Project_Innovate
 
         }
 
-
-
-        private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
+        private string getFilePath()
         {
-            string currentDir = Directory.GetCurrentDirectory();
-            string designatedFolder = Path.GetFullPath(Path.Combine(currentDir, @"..\..\..\..\..\Test\httpdocs\"));
             MessageBox.Show("Click the file.");
             Thread.Sleep(3000);
             string line = GetActiveWindowTitle();
@@ -154,8 +150,20 @@ namespace Project_Innovate
             string result = resultF.Substring(0, resultF.Length - 2);
             string source = String.Format(@"{0}", result);
 
-            File.Copy(source, designatedFolder + Path.GetFileName(source));
+            return source;
+        }
 
+        private void uploadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string currentDir = Directory.GetCurrentDirectory();
+            string designatedFolder = Path.GetFullPath(Path.Combine(currentDir, @"..\..\..\..\..\Test\httpdocs\"));
+
+            string source = getFilePath();
+            File.Delete(designatedFolder + Path.GetFileName(source));
+
+            deleteSFTPContents();            
+
+            File.Copy(source, designatedFolder + Path.GetFileName(source));
             try
             {
                 Sftp client = new Sftp();
@@ -199,13 +207,18 @@ namespace Project_Innovate
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            deleteSFTPContents();
+            MessageBox.Show("SFTP folder contents cleared!");
+        }
+
+        public void deleteSFTPContents()
+        {
             try
             {
                 Sftp client = new Sftp();
                 client.Connect("hermes.serverict.nl");
                 client.Login("hermes", "RCF&9xdr");
                 client.Delete("/httpdocs/*", TraversalMode.MatchFilesShallow);
-                MessageBox.Show("SFTP folder contents cleared!");
             }
             catch (Exception ex)
             {
